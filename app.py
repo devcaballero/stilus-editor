@@ -115,12 +115,12 @@ async def generate_pdf(payload: PdfRequest) -> FileResponse:
             payload.html,
             payload.css,
         )
-    except Exception as exc:
+    except Exception:
         logger.exception("WeasyPrint failed to generate PDF")
         raise HTTPException(
             status_code=422,
-            detail=f"No se pudo generar el PDF: {exc}",
-        ) from exc
+            detail="No se pudo generar el PDF. Revisá el HTML y el CSS.",
+        ) from None
 
     if not pdf_bytes:
         raise HTTPException(
