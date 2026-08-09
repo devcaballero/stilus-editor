@@ -1,0 +1,28 @@
+/* ============================================================
+   STILUS — PRESET: DARK (editorial)
+   Fondo #10141a, acento oro, tipografía display + mono.
+   Tokens de tema. Las reglas viven en preset-base.css (concat tokens+base).
+   ============================================================ */
+
+:root {
+  --bg: #10141a;
+  --bg-raised: #171d25;
+  --ink: #eae6dd;
+  --ink-dim: #9aa3ad;
+  --ink-faint: #5b6470;
+  --gold: #c9a34a;
+  --gold-dim: #7a6636;
+  --rule: #262d38;
+  --rule-soft: #1c222b;
+  --hero-glow-a: rgba(201, 163, 74, 0.16);
+  --hero-glow-b: rgba(201, 163, 74, 0.05);
+
+  /* Aliases Stilus (compat) */
+  --color-bg: var(--bg);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-dim);
+  --color-accent: var(--gold);
+  --color-border: var(--rule);
+  --color-code-bg: var(--bg-raised);
+  --color-quote-border: var(--gold);
+}

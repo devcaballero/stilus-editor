@@ -1,0 +1,548 @@
+/* ============================================================
+   STILUS — PRESET BASE (editorial)
+   Reglas compartidas. Los tokens de color viven en preset-{key}.css
+   y se concatenan delante (tokens + base) al cargar el preset.
+   ============================================================ */
+
+:root {
+  --font-body: "Open Sans", "Inter", "Segoe UI", sans-serif;
+  --font-display: "Lora", "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url("fonts/Lora-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lora";
+  src: url("fonts/Lora-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lora";
+  src: url("fonts/Lora-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/OpenSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/OpenSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/OpenSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   PÁGINAS — WeasyPrint
+   ============================================================ */
+@page cover {
+  size: A4;
+  margin: 0;
+  background: var(--bg);
+  background-color: var(--bg);
+  counter-reset: page 1;
+}
+
+@page {
+  size: A4;
+  margin: 2cm;
+  background: var(--bg);
+  background-color: var(--bg);
+  @bottom-center {
+    content: counter(page);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+}
+
+@page :first {
+  @bottom-center {
+    content: none;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+  background-color: var(--bg);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 28px 120px;
+}
+
+@media print {
+  .wrap {
+    max-width: none;
+    padding: 0 0 0;
+  }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding: 120px 0 72px;
+  text-align: left;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-38%);
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(
+    circle,
+    var(--hero-glow-a) 0%,
+    var(--hero-glow-b) 42%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+.eyebrow {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 22px;
+}
+h1.title {
+  position: relative;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 46px;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0 0 24px;
+  max-width: 11.5em;
+}
+.lede {
+  position: relative;
+  font-size: 17px;
+  color: var(--ink-dim);
+  max-width: 54ch;
+  margin: 0;
+}
+
+/* Section headers */
+.section {
+  padding: 56px 0 8px;
+}
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.section-num {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 25px;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+h2.section-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 25px;
+  color: var(--ink);
+  margin: 0;
+}
+.section-intro {
+  color: var(--ink-dim);
+  font-size: 15.5px;
+  margin: -12px 0 26px;
+}
+
+/* Items */
+ul.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.items li {
+  position: relative;
+  padding: 0 0 22px 26px;
+  border-left: 1px solid var(--rule);
+  margin-left: 5px;
+}
+ul.items li::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+ul.items li:last-child {
+  border-left-color: transparent;
+}
+ul.items li strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+ul.items li span.body {
+  color: var(--ink-dim);
+  font-size: 15.5px;
+}
+
+hr.divider {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 8px 0 0;
+}
+
+/* Un día tipo */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.timeline li {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  align-items: baseline;
+}
+.timeline li:last-child {
+  border-bottom: none;
+}
+.timeline time {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--gold);
+  white-space: normal;
+  overflow-wrap: break-word;
+  padding-right: 8px;
+}
+.timeline p {
+  margin: 0;
+  color: var(--ink-dim);
+  font-size: 15px;
+}
+.timeline p strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Closing */
+.closing {
+  margin-top: 64px;
+  padding: 40px 32px;
+  background: var(--bg-raised);
+  border-radius: 4px;
+  border-left: 2px solid var(--gold);
+}
+.closing h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 21px;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+.closing p {
+  color: var(--ink-dim);
+  font-size: 15.5px;
+  margin: 0 0 14px;
+}
+.closing p:last-child {
+  margin-bottom: 0;
+}
+.closing p.pull {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.sources {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--rule);
+}
+.sources h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.sources-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 18px;
+}
+.sources-note.further {
+  margin-top: 32px;
+}
+ol.sources-list {
+  list-style: none;
+  counter-reset: src;
+  margin: 0;
+  padding: 0;
+}
+ol.sources-list li {
+  counter-increment: src;
+  position: relative;
+  padding: 0 0 14px 30px;
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+ol.sources-list li::before {
+  content: "[" counter(src) "]";
+  position: absolute;
+  left: 0;
+  color: var(--gold-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+ol.sources-list li em {
+  color: var(--ink);
+  font-style: italic;
+}
+
+ul.further-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.further-list li {
+  padding: 0 0 10px 0;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+ul.further-list li em {
+  color: var(--ink);
+  font-style: italic;
+}
+
+sup.ref {
+  font-size: 11px;
+  margin-left: 1px;
+}
+sup.ref a {
+  color: var(--gold);
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
+sup.ref a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  h1.title {
+    font-size: 34px;
+  }
+  .hero {
+    padding: 84px 0 56px;
+  }
+  .timeline li {
+    grid-template-columns: 96px 1fr;
+  }
+}
+
+/* ============================================================
+   Control de paginación (WeasyPrint)
+   ============================================================ */
+ul.items li,
+ul.further-list li,
+ol.sources-list li,
+.timeline li {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.section-head,
+h2.section-title,
+.section-intro {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.closing {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.sources h2,
+.sources-note {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+p {
+  orphans: 3;
+  widows: 3;
+}
+
+/* Portada tipográfica full-page */
+.cover-page {
+  page: cover;
+  page-break-after: always;
+  break-after: page;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: block;
+}
+.cover-page .hero {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 120px 28px 72px;
+}
+
+@media print {
+  .cover-page {
+    min-height: 297mm;
+  }
+  .cover-page .hero {
+    padding: 28mm 18mm 20mm;
+  }
+  .hero::before {
+    display: none;
+  }
+}
+
+/* Bloque recomendación — mismo estilo que .closing */
+.closing.tool-recs {
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+/* Markdown genérico (si el HTML no usa las clases editoriales) */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.22;
+  color: var(--ink);
+  break-after: avoid;
+  page-break-after: avoid;
+}
+h1 {
+  font-size: 2.2rem;
+  margin: 0 0 1.1rem;
+}
+h2 {
+  font-size: 1.55rem;
+  margin: 2rem 0 0.75rem;
+}
+h3 {
+  font-size: 1.25rem;
+  margin: 1.6rem 0 0.6rem;
+}
+a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.35rem 0 0.35rem 1.2rem;
+  border-left: 2px solid var(--gold);
+  color: var(--ink-dim);
+  font-family: var(--font-display);
+  font-style: italic;
+}
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+pre {
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+code {
+  background: var(--bg-raised);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+pre code {
+  background: none;
+  padding: 0;
+}
