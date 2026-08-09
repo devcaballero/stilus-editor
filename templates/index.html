@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stilus — Diseño editorial · MD/HTML + CSS → PDF</title>
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/neo.min.css">
+
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <a class="skip-link" href="#panels">Saltar al editor</a>
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div class="brand-text">
+        <h1 class="brand-name">Stilus</h1>
+        <p class="brand-tagline">Diseño editorial · MD/HTML + CSS → PDF</p>
+      </div>
+    </div>
+
+    <div class="header-toolbar">
+      <label class="toolbar-field toolbar-field--preset" for="preset-select">
+        <span class="toolbar-label">Preset CSS</span>
+        <select id="preset-select" aria-label="Seleccionar preset CSS">
+          <option value="">— Personalizado —</option>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="warm">Warm</option>
+        </select>
+      </label>
+
+      <div class="toolbar-field toolbar-field--cover">
+        <span class="toolbar-label" id="cover-label">Portada</span>
+        <div class="cover-control" id="cover-control" data-has-cover="false">
+          <label class="cover-pick" for="cover-file" title="Subir imagen de portada">
+            <img id="cover-thumb" class="cover-thumb" alt="Miniatura de portada" hidden>
+            <span id="cover-placeholder" class="cover-placeholder">Subir</span>
+          </label>
+          <input
+            type="file"
+            id="cover-file"
+            class="cover-file-input"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+          >
+          <button
+            type="button"
+            id="btn-cover-clear"
+            class="cover-clear"
+            hidden
+            aria-label="Quitar imagen de portada"
+            title="Quitar portada"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar-field toolbar-field--assets">
+        <span class="toolbar-label">Assets</span>
+        <div class="assets-control" id="assets-control">
+          <button
+            type="button"
+            id="btn-assets-toggle"
+            class="assets-toggle"
+            aria-expanded="false"
+            aria-controls="assets-panel"
+            title="Imágenes del documento HTML"
+          >
+            <span class="assets-toggle-count" id="assets-count">0</span>
+            <span class="assets-toggle-text">archivos</span>
+          </button>
+          <div class="assets-panel" id="assets-panel" hidden>
+            <p class="assets-hint">
+              Subí las imágenes que el HTML referencia por nombre
+              (ej. <code>logo.png</code>).
+            </p>
+            <div class="assets-panel-actions">
+              <label class="assets-upload-btn" for="assets-file">Subir imágenes</label>
+              <input
+                type="file"
+                id="assets-file"
+                class="assets-file-input"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                multiple
+              >
+              <button
+                type="button"
+                id="btn-assets-clear-all"
+                class="assets-clear-all"
+                hidden
+              >
+                Vaciar
+              </button>
+            </div>
+            <ul class="assets-list" id="assets-list"></ul>
+            <p class="assets-empty" id="assets-empty">Sin assets todavía.</p>
+          </div>
+        </div>
+      </div>
+
+      <label class="toolbar-field toolbar-field--filename" for="pdf-filename">
+        <span class="toolbar-label">Nombre del PDF</span>
+        <div class="filename-input">
+          <input
+            type="text"
+            id="pdf-filename"
+            maxlength="120"
+            placeholder="stilus-documento"
+            spellcheck="false"
+            autocomplete="off"
+            aria-label="Nombre del archivo PDF"
+          >
+          <span class="filename-ext" aria-hidden="true">.pdf</span>
+        </div>
+      </label>
+    </div>
+  </header>
+
+  <p id="status-bar" class="status-bar" role="status" aria-live="polite" hidden></p>
+
+  <main class="panels" id="panels">
+    <div class="panels-editors" id="panels-editors">
+      <section class="panel" aria-labelledby="panel-md-title">
+        <header class="panel-header">
+          <h2 id="panel-md-title">Markdown / HTML</h2>
+          <div class="panel-header-end">
+            <div class="panel-actions">
+              <button
+                type="button"
+                class="panel-icon-btn"
+                id="btn-md-copy"
+                title="Copiar contenido"
+                aria-label="Copiar Markdown o HTML"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="3" y="7" width="13" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="panel-icon-btn panel-icon-btn--danger"
+                id="btn-md-clear"
+                title="Vaciar editor"
+                aria-label="Vaciar Markdown o HTML"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M4 7h16M9 7V5h6v2M8 7l1 12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2l1-12M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <span class="panel-index" aria-hidden="true">01</span>
+          </div>
+        </header>
+        <div class="panel-body">
+          <textarea id="editor-markdown" aria-label="Editor Markdown o HTML"></textarea>
+        </div>
+      </section>
+
+      <div
+        class="splitter splitter--row"
+        id="splitter-editors"
+        role="separator"
+        aria-orientation="horizontal"
+        aria-label="Redimensionar Markdown y CSS"
+        tabindex="0"
+      ></div>
+
+      <section class="panel" aria-labelledby="panel-css-title">
+        <header class="panel-header">
+          <h2 id="panel-css-title">CSS</h2>
+          <div class="panel-header-end">
+            <div class="panel-actions">
+              <button
+                type="button"
+                class="panel-icon-btn"
+                id="btn-css-copy"
+                title="Copiar CSS"
+                aria-label="Copiar CSS"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="3" y="7" width="13" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="panel-icon-btn panel-icon-btn--danger"
+                id="btn-css-clear"
+                title="Vaciar CSS"
+                aria-label="Vaciar CSS"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M4 7h16M9 7V5h6v2M8 7l1 12a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2l1-12M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <span class="panel-index" aria-hidden="true">02</span>
+          </div>
+        </header>
+        <div class="panel-body">
+          <textarea id="editor-css" aria-label="Editor CSS"></textarea>
+        </div>
+      </section>
+    </div>
+
+    <div
+      class="splitter splitter--col"
+      id="splitter-main"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Redimensionar editores y vista previa"
+      tabindex="0"
+    ></div>
+
+    <section class="panel panel-preview" aria-labelledby="panel-preview-title">
+      <header class="panel-header">
+        <h2 id="panel-preview-title">Vista previa</h2>
+        <span class="panel-index" aria-hidden="true">03</span>
+      </header>
+      <div class="panel-body preview-frame-wrap">
+        <iframe
+          id="preview-frame"
+          title="Vista previa del documento"
+          sandbox="allow-same-origin"
+        ></iframe>
+      </div>
+      <div class="export-float">
+        <button type="button" id="btn-export" class="btn-export-float">
+          <span class="btn-export-float__glow" aria-hidden="true"></span>
+          <span class="btn-export-float__label">Exportar PDF</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>WeasyPrint {{ weasyprint_version }}</span>
+    <span>Vista previa · 300 ms · localStorage</span>
+  </footer>
+
+  <!-- Libraries (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/xml/xml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
+
+  <script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

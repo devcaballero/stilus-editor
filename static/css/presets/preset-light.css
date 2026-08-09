@@ -1,0 +1,28 @@
+/* ============================================================
+   STILUS — PRESET: LIGHT (editorial)
+   Misma estructura que dark; tokens claros + acento azul.
+   Tokens de tema. Las reglas viven en preset-base.css (concat tokens+base).
+   ============================================================ */
+
+:root {
+  --bg: #ffffff;
+  --bg-raised: #f4f2ee;
+  --ink: #333333;
+  --ink-dim: #5a5a5a;
+  --ink-faint: #8a8a8a;
+  --gold: #005bb7;
+  --gold-dim: #7a5220;
+  --rule: #ddd6cb;
+  --rule-soft: #eeebe4;
+  --hero-glow-a: rgba(0, 91, 183, 0.12);
+  --hero-glow-b: rgba(0, 91, 183, 0.04);
+
+  /* Aliases Stilus (compat) */
+  --color-bg: var(--bg);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-dim);
+  --color-accent: var(--gold);
+  --color-border: var(--rule);
+  --color-code-bg: var(--bg-raised);
+  --color-quote-border: var(--gold);
+}

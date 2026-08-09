@@ -1,0 +1,28 @@
+/* ============================================================
+   STILUS — PRESET: WARM (editorial)
+   Misma estructura que dark; fondo crema + acento bronce/oro.
+   Tokens de tema. Las reglas viven en preset-base.css (concat tokens+base).
+   ============================================================ */
+
+:root {
+  --bg: #faf8f3;
+  --bg-raised: #f0ebe1;
+  --ink: #3a3a3a;
+  --ink-dim: #6a6a6a;
+  --ink-faint: #8a8580;
+  --gold: #8a5a20;
+  --gold-dim: #a07840;
+  --rule: #e8e3d8;
+  --rule-soft: #efece4;
+  --hero-glow-a: rgba(138, 90, 32, 0.14);
+  --hero-glow-b: rgba(138, 90, 32, 0.05);
+
+  /* Aliases Stilus (compat) */
+  --color-bg: var(--bg);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-dim);
+  --color-accent: var(--gold);
+  --color-border: var(--rule);
+  --color-code-bg: var(--bg-raised);
+  --color-quote-border: var(--gold);
+}

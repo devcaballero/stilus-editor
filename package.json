@@ -1,0 +1,11 @@
+{
+  "name": "stilus-text-editor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:js": "node --test tests/js/*.test.js",
+    "test:py": "pytest -q",
+    "test": "npm run test:js && npm run test:py",
+    "lint:py": "ruff check app.py stilus tests"
+  }
+}
