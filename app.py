@@ -98,6 +98,12 @@ async def index(request: Request) -> HTMLResponse:
     )
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon() -> FileResponse:
+    """Serve the PNG icon for browsers that request /favicon.ico."""
+    return FileResponse(STATIC_DIR / "favicon.png", media_type="image/png")
+
+
 @app.post(
     "/api/generate-pdf",
     responses={

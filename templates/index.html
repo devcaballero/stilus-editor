@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Stilus — Diseño editorial · MD/HTML + CSS → PDF</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png?v=2">
+  <link rel="apple-touch-icon" href="/static/favicon.png?v=2">
 
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/neo.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/dialog/dialog.min.css">
+  <link rel="stylesheet" href="/static/css/cm-cursor.css">
 
   <link rel="stylesheet" href="/static/css/app.css">
 </head>
@@ -17,11 +19,10 @@
 
   <header class="app-header">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <div class="brand-text">
-        <h1 class="brand-name">Stilus</h1>
-        <p class="brand-tagline">Diseño editorial · MD/HTML + CSS → PDF</p>
-      </div>
+      <h1 class="brand-name">
+        <img class="brand-logo" src="/static/logo.png?v=3" alt="Stilus" width="148" height="36">
+      </h1>
+      <p class="brand-tagline">Diseño editorial · MD/HTML + CSS → PDF</p>
     </div>
 
     <div class="header-toolbar">
@@ -327,6 +328,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/dialog/dialog.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/search/searchcursor.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/search/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/selection/active-line.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
 
