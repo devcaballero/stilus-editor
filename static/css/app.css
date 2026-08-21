@@ -812,8 +812,15 @@ body.is-resizing-panels.is-resizing-row {
 }
 
 body.is-resizing-panels iframe,
-body.is-resizing-panels .CodeMirror {
+body.is-resizing-panels .CodeMirror,
+body.is-dragging-panel iframe,
+body.is-dragging-panel .CodeMirror {
   pointer-events: none;
+}
+
+body.is-dragging-panel {
+  user-select: none;
+  cursor: grabbing;
 }
 
 .panel {
@@ -828,8 +835,7 @@ body.is-resizing-panels .CodeMirror {
 .panel-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-1);
+  gap: 6px;
   flex: 0 0 auto;
   min-height: 40px;
   padding: 0 var(--space-2);
@@ -839,6 +845,8 @@ body.is-resizing-panels .CodeMirror {
 
 .panel-header h2 {
   margin: 0;
+  flex: 1;
+  min-width: 0;
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -852,7 +860,6 @@ body.is-resizing-panels .CodeMirror {
   align-items: center;
   gap: 6px;
   flex: 0 0 auto;
-  margin-left: auto;
 }
 
 .panel-actions {
@@ -897,6 +904,77 @@ body.is-resizing-panels .CodeMirror {
   border-color: color-mix(in srgb, var(--danger) 28%, var(--line));
 }
 
+.panel-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0 -6px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: color-mix(in srgb, var(--ink-muted) 78%, var(--paper));
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  flex: 0 0 auto;
+  transition:
+    color var(--ease),
+    background var(--ease),
+    border-color var(--ease);
+}
+
+.panel-drag-handle:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 70%, white);
+  border-color: var(--line);
+}
+
+.panel-drag-handle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.panel-drag-handle .panel-icon {
+  fill: currentColor;
+}
+
+.panel-drag-handle:active,
+body.is-dragging-panel .panel-drag-handle {
+  cursor: grabbing;
+}
+
+.panel.is-dragging {
+  opacity: 0.48;
+}
+
+.panel.is-drop-target {
+  box-shadow: var(--shadow-soft), inset 0 0 0 2px var(--accent);
+}
+
+.panel-drag-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  pointer-events: none;
+  padding: 6px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--panel-bg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-panel);
+  white-space: nowrap;
+}
+
 .panel-icon {
   width: 15px;
   height: 15px;
@@ -926,6 +1004,50 @@ body.is-resizing-panels .CodeMirror {
   line-height: 1.55;
   background: var(--panel-bg);
   color: var(--ink);
+}
+
+.panel-body .CodeMirror-dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--paper) 92%, var(--ink));
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-ui, inherit);
+  font-size: 0.8125rem;
+  box-shadow: none;
+}
+
+.panel-body .CodeMirror-dialog input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel-bg);
+  color: var(--ink);
+  font: inherit;
+}
+
+.panel-body .CodeMirror-dialog input:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.panel-body .CodeMirror-search-hint {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.panel-body .cm-searching {
+  background: color-mix(in srgb, var(--focus) 28%, transparent);
 }
 
 .CodeMirror-scroll {
