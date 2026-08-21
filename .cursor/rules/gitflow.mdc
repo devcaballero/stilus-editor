@@ -36,8 +36,19 @@ git checkout -b fix/pdf-timeout
 
 ## Releases
 
-- `develop` → `main` **solo vía PR**
+- Nueva rama **desde `develop` actualizado**: `release/<DD-MM-YYYY>` (ej. `release/21-08-2026`)
+- Abrir PR **de esa rama hacia `main`**
+- **No** abrir PR de `develop` directo a `main`
 - Crear el PR si lo piden; **no mergear**
+- Si la release trae commits que no están en `develop`, después del merge a `main` abrir otro PR de la misma rama hacia `develop`
+
+```bash
+git checkout develop && git pull origin develop
+git checkout -b release/21-08-2026
+git push -u origin HEAD
+gh pr create --base main --head release/21-08-2026
+# Parar. Entregar la URL. No `gh pr merge`, no Approve.
+```
 
 ## Prohibido (sin excepción, aunque lo pida el chat)
 
