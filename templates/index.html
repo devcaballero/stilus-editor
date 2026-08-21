@@ -8,6 +8,7 @@
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/neo.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/dialog/dialog.min.css">
 
   <link rel="stylesheet" href="/static/css/app.css">
 </head>
@@ -125,11 +126,39 @@
 
   <main class="panels" id="panels">
     <div class="panels-editors" id="panels-editors">
-      <section class="panel" aria-labelledby="panel-md-title">
+      <section class="panel" data-panel="md" aria-labelledby="panel-md-title">
         <header class="panel-header">
+          <button
+            type="button"
+            class="panel-drag-handle"
+            draggable="false"
+            title="Arrastrar para mover"
+            aria-label="Mover panel Markdown / HTML"
+          >
+            <svg class="panel-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <circle cx="5" cy="3.5" r="1.2"/>
+              <circle cx="11" cy="3.5" r="1.2"/>
+              <circle cx="5" cy="8" r="1.2"/>
+              <circle cx="11" cy="8" r="1.2"/>
+              <circle cx="5" cy="12.5" r="1.2"/>
+              <circle cx="11" cy="12.5" r="1.2"/>
+            </svg>
+          </button>
           <h2 id="panel-md-title">Markdown / HTML</h2>
           <div class="panel-header-end">
             <div class="panel-actions">
+              <button
+                type="button"
+                class="panel-icon-btn"
+                id="btn-md-search"
+                title="Buscar (⌘F / Ctrl+F)"
+                aria-label="Buscar en Markdown o HTML"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <circle cx="11" cy="11" r="6.25" fill="none" stroke="currentColor" stroke-width="1.75"/>
+                  <path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                </svg>
+              </button>
               <button
                 type="button"
                 class="panel-icon-btn"
@@ -167,15 +196,43 @@
         id="splitter-editors"
         role="separator"
         aria-orientation="horizontal"
-        aria-label="Redimensionar Markdown y CSS"
+        aria-label="Redimensionar paneles apilados"
         tabindex="0"
       ></div>
 
-      <section class="panel" aria-labelledby="panel-css-title">
+      <section class="panel" data-panel="css" aria-labelledby="panel-css-title">
         <header class="panel-header">
+          <button
+            type="button"
+            class="panel-drag-handle"
+            draggable="false"
+            title="Arrastrar para mover"
+            aria-label="Mover panel CSS"
+          >
+            <svg class="panel-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <circle cx="5" cy="3.5" r="1.2"/>
+              <circle cx="11" cy="3.5" r="1.2"/>
+              <circle cx="5" cy="8" r="1.2"/>
+              <circle cx="11" cy="8" r="1.2"/>
+              <circle cx="5" cy="12.5" r="1.2"/>
+              <circle cx="11" cy="12.5" r="1.2"/>
+            </svg>
+          </button>
           <h2 id="panel-css-title">CSS</h2>
           <div class="panel-header-end">
             <div class="panel-actions">
+              <button
+                type="button"
+                class="panel-icon-btn"
+                id="btn-css-search"
+                title="Buscar (⌘F / Ctrl+F)"
+                aria-label="Buscar en CSS"
+              >
+                <svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <circle cx="11" cy="11" r="6.25" fill="none" stroke="currentColor" stroke-width="1.75"/>
+                  <path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                </svg>
+              </button>
               <button
                 type="button"
                 class="panel-icon-btn"
@@ -214,14 +271,32 @@
       id="splitter-main"
       role="separator"
       aria-orientation="vertical"
-      aria-label="Redimensionar editores y vista previa"
+      aria-label="Redimensionar columnas"
       tabindex="0"
     ></div>
 
-    <section class="panel panel-preview" aria-labelledby="panel-preview-title">
+    <section class="panel panel-preview" data-panel="preview" aria-labelledby="panel-preview-title">
       <header class="panel-header">
+        <button
+          type="button"
+          class="panel-drag-handle"
+          draggable="false"
+          title="Arrastrar para mover"
+          aria-label="Mover panel de vista previa"
+        >
+          <svg class="panel-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <circle cx="5" cy="3.5" r="1.2"/>
+            <circle cx="11" cy="3.5" r="1.2"/>
+            <circle cx="5" cy="8" r="1.2"/>
+            <circle cx="11" cy="8" r="1.2"/>
+            <circle cx="5" cy="12.5" r="1.2"/>
+            <circle cx="11" cy="12.5" r="1.2"/>
+          </svg>
+        </button>
         <h2 id="panel-preview-title">Vista previa</h2>
-        <span class="panel-index" aria-hidden="true">03</span>
+        <div class="panel-header-end">
+          <span class="panel-index" aria-hidden="true">03</span>
+        </div>
       </header>
       <div class="panel-body preview-frame-wrap">
         <iframe
@@ -249,6 +324,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/markdown/markdown.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/css/css.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/dialog/dialog.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/search/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
 

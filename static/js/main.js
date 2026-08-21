@@ -18,6 +18,11 @@ import {
   PRESET_KEYS,
   loadPresetCss,
 } from "./presets.js";
+import {
+  DEFAULT_PANEL_ORDER,
+  normalizePanelOrder,
+  swapPanelOrder,
+} from "./layout.js";
 
 const MAX_ASSET_BYTES = 2.5 * 1024 * 1024;
 const MAX_ASSETS = 40;
@@ -131,8 +136,10 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     assetsEmpty: document.getElementById("assets-empty"),
     assetsCount: document.getElementById("assets-count"),
     assetsClearAll: document.getElementById("btn-assets-clear-all"),
+    mdSearchBtn: document.getElementById("btn-md-search"),
     mdCopyBtn: document.getElementById("btn-md-copy"),
     mdClearBtn: document.getElementById("btn-md-clear"),
+    cssSearchBtn: document.getElementById("btn-css-search"),
     cssCopyBtn: document.getElementById("btn-css-copy"),
     cssClearBtn: document.getElementById("btn-css-clear"),
   };
@@ -162,8 +169,10 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     !els.assetsEmpty ||
     !els.assetsCount ||
     !els.assetsClearAll ||
+    !els.mdSearchBtn ||
     !els.mdCopyBtn ||
     !els.mdClearBtn ||
+    !els.cssSearchBtn ||
     !els.cssCopyBtn ||
     !els.cssClearBtn
   ) {
@@ -818,6 +827,17 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
   updateCoverUi();
   loadAssetsFromStorage();
   
+  const editorSearchKeys = {
+    "Ctrl-F": "findPersistent",
+    "Cmd-F": "findPersistent",
+    "Ctrl-G": "findNext",
+    "Cmd-G": "findNext",
+    "Shift-Ctrl-G": "findPrev",
+    "Shift-Cmd-G": "findPrev",
+    "Shift-Ctrl-F": "replace",
+    "Cmd-Alt-F": "replace",
+  };
+
   const mdEditor = CodeMirror.fromTextArea(els.mdTextarea, {
     mode: "markdown",
     theme: "neo",
@@ -826,8 +846,9 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     indentUnit: 2,
     tabSize: 2,
     autofocus: true,
+    extraKeys: editorSearchKeys,
   });
-  
+
   const cssEditor = CodeMirror.fromTextArea(els.cssTextarea, {
     mode: "css",
     theme: "neo",
@@ -835,6 +856,7 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     lineWrapping: true,
     indentUnit: 2,
     tabSize: 2,
+    extraKeys: editorSearchKeys,
   });
   
   mdEditor.setValue(savedMarkdown !== null ? savedMarkdown : DEFAULT_MARKDOWN);
@@ -945,10 +967,20 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     }
   }
   
+  els.mdSearchBtn.addEventListener("click", () => {
+    mdEditor.focus();
+    mdEditor.execCommand("findPersistent");
+  });
+
+  els.cssSearchBtn.addEventListener("click", () => {
+    cssEditor.focus();
+    cssEditor.execCommand("findPersistent");
+  });
+
   els.mdCopyBtn.addEventListener("click", () => {
     copyEditorText(mdEditor.getValue(), "Markdown / HTML");
   });
-  
+
   els.cssCopyBtn.addEventListener("click", () => {
     copyEditorText(cssEditor.getValue(), "CSS");
   });
@@ -999,13 +1031,23 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
   }
   
   /**
-   * @returns {{ editorsPct: number, mdPct: number }}
+   * @returns {{ editorsPct: number, mdPct: number, panelOrder: string[] }}
+   */
+  function emptyLayout() {
+    return {
+      ...LAYOUT_DEFAULTS,
+      panelOrder: [...DEFAULT_PANEL_ORDER],
+    };
+  }
+
+  /**
+   * @returns {{ editorsPct: number, mdPct: number, panelOrder: string[] }}
    */
   function loadLayout() {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.layout);
       if (!raw) {
-        return { ...LAYOUT_DEFAULTS };
+        return emptyLayout();
       }
       const parsed = JSON.parse(raw);
       return {
@@ -1019,14 +1061,15 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
           LAYOUT_LIMITS.mdMin,
           LAYOUT_LIMITS.mdMax
         ),
+        panelOrder: normalizePanelOrder(parsed.panelOrder),
       };
     } catch {
-      return { ...LAYOUT_DEFAULTS };
+      return emptyLayout();
     }
   }
   
   /**
-   * @param {{ editorsPct: number, mdPct: number }} layout
+   * @param {{ editorsPct: number, mdPct: number, panelOrder: string[] }} layout
    */
   function persistLayout(layout) {
     try {
@@ -1036,13 +1079,44 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     }
   }
   
-  /** @type {{ editorsPct: number, mdPct: number }} */
+  /** @type {{ editorsPct: number, mdPct: number, panelOrder: string[] }} */
   let layoutState = loadLayout();
   
   const layoutMq = window.matchMedia("(max-width: 1100px)");
   
   /**
-   * @param {{ editorsPct: number, mdPct: number }} layout
+   * @param {string} id
+   * @returns {HTMLElement | null}
+   */
+  function panelById(id) {
+    const panel = els.panels.querySelector(`[data-panel="${id}"]`);
+    return panel instanceof HTMLElement ? panel : null;
+  }
+
+  /**
+   * @param {readonly string[]} order
+   */
+  function placePanels(order) {
+    const [topId, bottomId, sideId] = order;
+    const topEl = panelById(topId);
+    const bottomEl = panelById(bottomId);
+    const sideEl = panelById(sideId);
+    if (!topEl || !bottomEl || !sideEl) {
+      return;
+    }
+    els.panelsEditors.append(topEl, els.splitterEditors, bottomEl);
+    els.panels.append(els.panelsEditors, els.splitterMain, sideEl);
+    const labels = ["01", "02", "03"];
+    [topEl, bottomEl, sideEl].forEach((panel, index) => {
+      const badge = panel.querySelector(".panel-index");
+      if (badge) {
+        badge.textContent = labels[index];
+      }
+    });
+  }
+
+  /**
+   * @param {{ editorsPct: number, mdPct: number, panelOrder?: string[] }} layout
    * @param {boolean} [save]
    */
   function applyLayout(layout, save) {
@@ -1053,6 +1127,9 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
         LAYOUT_LIMITS.editorsMax
       ),
       mdPct: clamp(layout.mdPct, LAYOUT_LIMITS.mdMin, LAYOUT_LIMITS.mdMax),
+      panelOrder: normalizePanelOrder(
+        layout.panelOrder ?? layoutState.panelOrder
+      ),
     };
   
     if (layoutMq.matches) {
@@ -1170,9 +1247,147 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
     });
   }
   
+  function bindPanelDrag() {
+    const dragThresholdPx = 5;
+
+    els.panels.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || document.body.classList.contains("is-resizing-panels")) {
+        return;
+      }
+      const handle =
+        event.target instanceof Element
+          ? event.target.closest(".panel-drag-handle")
+          : null;
+      if (!(handle instanceof HTMLElement)) {
+        return;
+      }
+      const sourcePanel = handle.closest("[data-panel]");
+      if (!(sourcePanel instanceof HTMLElement) || !sourcePanel.dataset.panel) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const sourceId = sourcePanel.dataset.panel;
+      const pointerId = event.pointerId;
+      const startX = event.clientX;
+      const startY = event.clientY;
+      let dragging = false;
+      /** @type {HTMLElement | null} */
+      let ghost = null;
+      /** @type {HTMLElement | null} */
+      let dropTarget = null;
+
+      try {
+        handle.setPointerCapture(pointerId);
+      } catch {
+        /* capture is optional */
+      }
+
+      /**
+       * @param {number} clientX
+       * @param {number} clientY
+       * @returns {HTMLElement | null}
+       */
+      function hitPanel(clientX, clientY) {
+        const el = document.elementFromPoint(clientX, clientY);
+        if (!(el instanceof Element)) {
+          return null;
+        }
+        const panel = el.closest("[data-panel]");
+        return panel instanceof HTMLElement ? panel : null;
+      }
+
+      function clearDropTarget() {
+        if (dropTarget) {
+          dropTarget.classList.remove("is-drop-target");
+          dropTarget = null;
+        }
+      }
+
+      /**
+       * @param {PointerEvent} moveEvent
+       */
+      function onMove(moveEvent) {
+        const dx = moveEvent.clientX - startX;
+        const dy = moveEvent.clientY - startY;
+        if (!dragging) {
+          if (dx * dx + dy * dy < dragThresholdPx * dragThresholdPx) {
+            return;
+          }
+          dragging = true;
+          document.body.classList.add("is-dragging-panel");
+          sourcePanel.classList.add("is-dragging");
+          ghost = document.createElement("div");
+          ghost.className = "panel-drag-ghost";
+          const title = sourcePanel.querySelector("h2");
+          ghost.textContent = title && title.textContent ? title.textContent : sourceId;
+          document.body.appendChild(ghost);
+        }
+        if (ghost) {
+          ghost.style.transform =
+            `translate(${moveEvent.clientX + 14}px, ${moveEvent.clientY + 12}px)`;
+        }
+
+        const hit = hitPanel(moveEvent.clientX, moveEvent.clientY);
+        const nextTarget =
+          hit && hit !== sourcePanel && hit.dataset.panel ? hit : null;
+        if (nextTarget === dropTarget) {
+          return;
+        }
+        clearDropTarget();
+        if (nextTarget) {
+          nextTarget.classList.add("is-drop-target");
+          dropTarget = nextTarget;
+        }
+      }
+
+      function onUp() {
+        document.removeEventListener("pointermove", onMove);
+        document.removeEventListener("pointerup", onUp);
+        document.removeEventListener("pointercancel", onUp);
+        try {
+          if (handle.hasPointerCapture(pointerId)) {
+            handle.releasePointerCapture(pointerId);
+          }
+        } catch {
+          /* already released */
+        }
+
+        const targetId = dropTarget && dropTarget.dataset.panel;
+        clearDropTarget();
+        sourcePanel.classList.remove("is-dragging");
+        document.body.classList.remove("is-dragging-panel");
+        if (ghost) {
+          ghost.remove();
+        }
+
+        if (!dragging || !targetId || targetId === sourceId) {
+          return;
+        }
+        const nextOrder = swapPanelOrder(
+          layoutState.panelOrder,
+          sourceId,
+          targetId
+        );
+        layoutState = { ...layoutState, panelOrder: nextOrder };
+        placePanels(nextOrder);
+        persistLayout(layoutState);
+        window.requestAnimationFrame(refreshEditors);
+      }
+
+      document.addEventListener("pointermove", onMove);
+      document.addEventListener("pointerup", onUp);
+      document.addEventListener("pointercancel", onUp);
+    });
+  }
+
   applyLayout(layoutState);
+  placePanels(layoutState.panelOrder);
+  window.requestAnimationFrame(refreshEditors);
   bindSplitter("col", els.splitterMain);
   bindSplitter("row", els.splitterEditors);
+  bindPanelDrag();
   
   layoutMq.addEventListener("change", () => {
     applyLayout(layoutState);
