@@ -44,5 +44,6 @@ git checkout -b fix/pdf-timeout
 - Aprobar reviews (`gh pr review --approve`)
 - Mergear PRs (`gh pr merge`, merge local + push a `main`/`develop`)
 - Auto-merge, squash/merge “para ahorrar tiempo”, o mergear “porque el usuario dijo subamos”
+- Añadir `Made with Cursor`, `Co-authored-by: Cursor`, u otra atribución de Cursor en commits o PRs
 
-Después de `gh pr create`, la respuesta termina con la URL del PR y espera la web.
+Después de `gh pr create`, si el cuerpo trae `Made with Cursor`, quitarlo con `gh pr edit`. Entregar la URL y esperar la web.
