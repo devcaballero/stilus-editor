@@ -23,6 +23,7 @@ import {
   normalizePanelOrder,
   swapPanelOrder,
 } from "./layout.js";
+import { bindCssColorSwatches } from "./cssColors.js";
 
 const MAX_ASSET_BYTES = 2.5 * 1024 * 1024;
 const MAX_ASSETS = 40;
@@ -840,9 +841,10 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
 
   const mdEditor = CodeMirror.fromTextArea(els.mdTextarea, {
     mode: "markdown",
-    theme: "neo",
+    theme: "cursor",
     lineNumbers: true,
     lineWrapping: true,
+    styleActiveLine: true,
     indentUnit: 2,
     tabSize: 2,
     autofocus: true,
@@ -851,9 +853,10 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
 
   const cssEditor = CodeMirror.fromTextArea(els.cssTextarea, {
     mode: "css",
-    theme: "neo",
+    theme: "cursor",
     lineNumbers: true,
     lineWrapping: true,
+    styleActiveLine: true,
     indentUnit: 2,
     tabSize: 2,
     extraKeys: editorSearchKeys,
@@ -863,6 +866,7 @@ Párrafo de cierre: invita a comentar o compartir la experiencia.
   
   mdEditor.on("change", onEditorChange);
   cssEditor.on("change", onEditorChange);
+  bindCssColorSwatches(cssEditor);
   
   els.filenameInput.addEventListener("input", schedulePersist);
   els.filenameInput.addEventListener("change", () => {
