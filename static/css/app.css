@@ -3,21 +3,21 @@
    tipografía legible (lh ~1.6), Gestalt (proximidad / alineación / figura-fondo). */
 
 :root {
-  /* ——— Color 60-30-10 (neutro / superficie / acento) ——— */
-  --ink: #1c1f24;           /* no pure black */
-  --ink-muted: #5a616c;     /* ≥4.5:1 aprox. sobre paper */
-  --paper: #f3f0ea;         /* 60% dominante */
-  --paper-deep: #e5e0d6;    /* 30% secundario */
-  --panel-bg: #fbfaf7;
-  --line: #d2ccc0;
-  --accent: #0d5c4d;        /* 10% acento — contraste AA sobre paper */
-  --accent-hover: #094539;
-  --accent-soft: #dceae6;
-  --danger: #8a2f2f;
-  --danger-bg: #f7ebeb;
-  --ok: #0d5c4d;
-  --ok-bg: #e4f0ec;
-  --focus: #0d5c4d;
+  /* Cursor Dark Anysphere */
+  --ink: #f0f0f0;
+  --ink-muted: #b8b8b8;
+  --paper: #141414;
+  --paper-deep: #181818;
+  --panel-bg: #181818;
+  --line: #2a2a2a;
+  --accent: #88c0d0;
+  --accent-hover: #87a6c4;
+  --accent-soft: #88c0d033;
+  --danger: #fc6b83;
+  --danger-bg: #e3467126;
+  --ok: #70b489;
+  --ok-bg: #3fa26626;
+  --focus: #88c0d0;
 
   /* ——— Escala 8pt ——— */
   --space-1: 8px;
@@ -42,8 +42,8 @@
   --fs-meta: 0.8125rem;     /* 13px */
   --lh-body: 1.6;
 
-  --shadow-soft: 0 1px 0 rgba(28, 31, 36, 0.06);
-  --shadow-panel: 0 8px 24px rgba(28, 31, 36, 0.08);
+  --shadow-soft: 0 1px 0 rgba(0, 0, 0, 0.35);
+  --shadow-panel: 0 8px 24px rgba(0, 0, 0, 0.4);
   --ease: 150ms ease;
 }
 
@@ -89,6 +89,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  color-scheme: dark;
 }
 
 body {
@@ -98,10 +99,7 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--ink);
-  background:
-    radial-gradient(1100px 420px at 8% -8%, #d7e6e1 0%, transparent 55%),
-    radial-gradient(900px 380px at 100% 0%, #efe6d4 0%, transparent 50%),
-    var(--paper);
+  background: var(--paper);
 }
 
 /* Focus visible — no depender solo del color de hover */
@@ -121,7 +119,7 @@ body {
   z-index: 100;
   padding: var(--space-1) var(--space-2);
   background: var(--accent);
-  color: #f4faf8;
+  color: #141414;
   border-radius: var(--radius);
   text-decoration: none;
   font-weight: 600;
@@ -142,47 +140,42 @@ body {
   gap: var(--space-3);
   padding: var(--header-pad-y) var(--header-pad-x);
   border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--paper) 90%, white);
+  background: var(--paper);
   backdrop-filter: blur(8px);
   overflow: visible;
 }
 
 .brand {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 10px;
-  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  flex: 0 0 auto;
   align-self: center;
   min-width: 0;
-}
-
-.brand-mark {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--accent);
-  flex: 0 0 auto;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  max-width: 168px;
 }
 
 .brand-name {
   margin: 0;
-  font-size: var(--fs-brand);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: var(--ink);
+  width: 148px;
+  height: 36px;
+  overflow: hidden;
+}
+
+.brand-logo {
+  display: block;
+  width: 148px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+  background: transparent;
 }
 
 .brand-tagline {
   margin: 0;
+  padding-left: 2px;
   color: var(--ink-muted);
   font-size: var(--fs-label);
   line-height: 1.3;
@@ -262,7 +255,7 @@ body {
 .header-toolbar select,
 .filename-input input {
   padding: 0 var(--space-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
   background: var(--panel-bg);
   color: var(--ink);
@@ -287,13 +280,13 @@ body {
 
 .header-toolbar select:hover,
 .filename-input:hover {
-  border-color: color-mix(in srgb, var(--ink-muted) 45%, var(--line));
+  border-color: var(--accent-hover);
 }
 
 .filename-input {
   display: flex;
   align-items: stretch;
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
   background: var(--panel-bg);
   overflow: hidden;
@@ -326,7 +319,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 12px;
-  border-left: 1px solid var(--line);
+  border-left: 1px solid var(--accent);
   background: var(--paper-deep);
   color: var(--ink-muted);
   font-size: var(--fs-meta);
@@ -399,7 +392,7 @@ body {
   height: var(--control-h);
   margin: 0;
   padding: 0 var(--space-1);
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
   background: var(--panel-bg);
   color: var(--ink-muted);
@@ -413,7 +406,7 @@ body {
 }
 
 .cover-pick:hover {
-  border-color: color-mix(in srgb, var(--ink-muted) 45%, var(--line));
+  border-color: var(--accent-hover);
 }
 
 .cover-control[data-has-cover="true"] .cover-pick {
@@ -484,7 +477,7 @@ body {
   height: var(--control-h);
   margin: 0;
   padding: 0 10px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
   background: var(--panel-bg);
   color: var(--ink);
@@ -498,7 +491,7 @@ body {
 
 .assets-toggle:hover,
 .assets-control[data-open="true"] .assets-toggle {
-  border-color: color-mix(in srgb, var(--ink-muted) 45%, var(--line));
+  border-color: var(--accent-hover);
 }
 
 .assets-toggle:focus-visible {
@@ -571,7 +564,7 @@ body {
   padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: color-mix(in srgb, var(--paper-deep) 55%, white);
+  background: var(--paper-deep);
   color: var(--ink);
   font: inherit;
   font-size: var(--fs-meta);
@@ -635,7 +628,7 @@ body {
   padding: 6px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: color-mix(in srgb, var(--paper) 70%, white);
+  background: var(--paper);
 }
 
 .assets-item-thumb {
@@ -840,7 +833,7 @@ body.is-dragging-panel {
   min-height: 40px;
   padding: 0 var(--space-2);
   border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--paper-deep) 50%, white);
+  background: var(--paper);
 }
 
 .panel-header h2 {
@@ -889,7 +882,7 @@ body.is-dragging-panel {
 
 .panel-icon-btn:hover {
   color: var(--ink);
-  background: color-mix(in srgb, var(--paper) 70%, white);
+  background: var(--paper);
   border-color: var(--line);
 }
 
@@ -915,7 +908,7 @@ body.is-dragging-panel {
   border: 1px solid transparent;
   border-radius: 6px;
   background: transparent;
-  color: color-mix(in srgb, var(--ink-muted) 78%, var(--paper));
+  color: var(--ink-muted);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -928,7 +921,7 @@ body.is-dragging-panel {
 
 .panel-drag-handle:hover {
   color: var(--ink);
-  background: color-mix(in srgb, var(--paper) 70%, white);
+  background: var(--paper);
   border-color: var(--line);
 }
 
@@ -963,8 +956,8 @@ body.is-dragging-panel .panel-drag-handle {
   padding: 6px 10px;
   border: 1px solid var(--accent);
   border-radius: 6px;
-  background: var(--ink);
-  color: var(--panel-bg);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--fs-label);
   font-weight: 600;
@@ -985,7 +978,7 @@ body.is-dragging-panel .panel-drag-handle {
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--ink-muted) 70%, var(--paper));
+  color: #6e6e6e;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1002,8 +995,6 @@ body.is-dragging-panel .panel-drag-handle {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.55;
-  background: var(--panel-bg);
-  color: var(--ink);
 }
 
 .panel-body .CodeMirror-dialog {
@@ -1015,9 +1006,6 @@ body.is-dragging-panel .panel-drag-handle {
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  background: color-mix(in srgb, var(--paper) 92%, var(--ink));
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
   font-family: var(--font-ui, inherit);
   font-size: 0.8125rem;
   box-shadow: none;
@@ -1028,34 +1016,22 @@ body.is-dragging-panel .panel-drag-handle {
   min-width: 0;
   margin: 0;
   padding: 4px 8px;
-  border: 1px solid var(--line);
   border-radius: 6px;
-  background: var(--panel-bg);
-  color: var(--ink);
   font: inherit;
 }
 
 .panel-body .CodeMirror-dialog input:focus {
-  outline: 2px solid var(--focus);
+  outline: 2px solid #88c0d0;
   outline-offset: 1px;
 }
 
 .panel-body .CodeMirror-search-hint {
-  color: var(--ink-muted);
   font-size: 0.75rem;
   white-space: nowrap;
 }
 
-.panel-body .cm-searching {
-  background: color-mix(in srgb, var(--focus) 28%, transparent);
-}
-
 .CodeMirror-scroll {
   min-height: 100%;
-}
-
-.CodeMirror-cursor {
-  border-left-color: var(--accent) !important;
 }
 
 .panel-preview {
@@ -1063,9 +1039,7 @@ body.is-dragging-panel .panel-drag-handle {
 }
 
 .preview-frame-wrap {
-  background:
-    linear-gradient(90deg, transparent 49%, rgba(28, 31, 36, 0.04) 50%, transparent 51%),
-    linear-gradient(var(--paper-deep), var(--paper));
+  background: var(--panel-bg);
   padding: var(--space-2);
 }
 
@@ -1075,7 +1049,7 @@ body.is-dragging-panel .panel-drag-handle {
   height: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #d8d2c6;
+  background: #1e1e1e;
   box-shadow: var(--shadow-panel);
 }
 
@@ -1104,7 +1078,7 @@ body.is-dragging-panel .panel-drag-handle {
   padding: 2px;
   border: none;
   border-radius: var(--radius);
-  background: #3a3428;
+  background: #16343c;
   color: var(--export-ink);
   font: inherit;
   font-size: var(--fs-meta);
@@ -1127,9 +1101,9 @@ body.is-dragging-panel .panel-drag-handle {
     from 0deg,
     transparent 0deg,
     transparent 200deg,
-    #c9a34a 250deg,
-    #f2d48a 295deg,
-    #c9a34a 330deg,
+    #88c0d0 250deg,
+    #e8fbff 295deg,
+    #88c0d0 330deg,
     transparent 360deg
   );
   animation: export-border-spin 2.6s linear infinite;
@@ -1165,7 +1139,7 @@ body.is-dragging-panel .panel-drag-handle {
 }
 
 .btn-export-float:focus-visible {
-  outline: 2px solid #e8c478;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -1193,6 +1167,8 @@ body.is-dragging-panel .panel-drag-handle {
   gap: var(--space-1) var(--space-2);
   min-height: 40px;
   padding: var(--space-1) var(--header-pad-x);
+  border-top: 1px solid var(--line);
+  background: var(--paper);
   font-size: var(--fs-label);
   line-height: 1.4;
   color: var(--ink-muted);
@@ -1299,7 +1275,7 @@ body.is-dragging-panel .panel-drag-handle {
     background: linear-gradient(
       120deg,
       transparent 20%,
-      rgba(201, 163, 74, 0.85) 50%,
+      rgba(136, 192, 208, 0.85) 50%,
       transparent 80%
     );
   }
